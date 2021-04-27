@@ -74,7 +74,8 @@ class Zookeeper < Formula
     inreplace "conf/zoo_sample.cfg",
               /^dataDir=.*/, "dataDir=#{var}/run/zookeeper/data"
     cp "conf/zoo_sample.cfg", "conf/zoo.cfg"
-    (etc/"zookeeper").install ["conf/zoo.cfg", "conf/zoo_sample.cfg"]
+    cp "conf/log4j.properties", "conf/log4j.properties.sample"
+    (etc/"zookeeper").install ["conf/zoo.cfg", "conf/zoo_sample.cfg", "conf/log4j.properties.sample"]
   end
 
   def post_install
