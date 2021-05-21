@@ -5,6 +5,7 @@ class Zookeeper < Formula
   mirror "https://archive.apache.org/dist/zookeeper/zookeeper-3.7.0/apache-zookeeper-3.7.0.tar.gz"
   sha256 "cb3980f61b66babe550dcb717c940160ba813512c0aca26c2b8a718fac5d465d"
   license "Apache-2.0"
+  revision 1
   head "https://gitbox.apache.org/repos/asf/zookeeper.git"
 
   bottle do
@@ -71,11 +72,14 @@ class Zookeeper < Formula
       EOS
     end
 
-    inreplace "conf/zoo_sample.cfg",
-              /^dataDir=.*/, "dataDir=#{var}/run/zookeeper/data"
     cp "conf/zoo_sample.cfg", "conf/zoo.cfg"
-    cp "conf/log4j.properties", "conf/log4j.properties.sample"
-    (etc/"zookeeper").install ["conf/zoo.cfg", "conf/zoo_sample.cfg", "conf/log4j.properties.sample"]
+    inreplace "conf/zoo.cfg",
+              /^dataDir=.*/, "dataDir=#{var}/run/zookeeper/data"
+    (etc/"zookeeper").install "conf/zoo.cfg"
+
+    (pkgshare/"examples").mkpath
+    (pkgshare/"examples").install "conf/log4j.properties"
+    (pkgshare/"examples").install "conf/zoo_sample.cfg"
   end
 
   def post_install
