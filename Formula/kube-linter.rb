@@ -5,6 +5,7 @@ class KubeLinter < Formula
   sha256 "5d2e724e291b00b6a61ebd2bd97f3f3c26298f890be2b555b60f0fb719c5384f"
   license "Apache-2.0"
   head "https://github.com/stackrox/kube-linter.git"
+  revision 1
 
   bottle do
     sha256 cellar: :any_skip_relocation, arm64_monterey: "edc3e9482784907ac7c598cf0e07c724373d37cfa264b3be14ffe6e4c0142add"
@@ -22,6 +23,15 @@ class KubeLinter < Formula
     ENV["CGO_ENABLED"] = "0"
     ldflags = "-s -w -X golang.stackrox.io/kube-linter/internal/version.version=#{version}"
     system "go", "build", *std_go_args(ldflags: ldflags), "./cmd/kube-linter"
+
+    bash_output = Utils.safe_popen_read(bin/"kube-linter", "completion", "bash")
+    (bash_completion/"kube-linter").write bash_output
+
+    zsh_output = Utils.safe_popen_read(bin/"kube-linter", "completion", "zsh")
+    (zsh_completion/"_kube-linter").write zsh_output
+
+    fish_output = Utils.safe_popen_read(bin/"kube-linter", "completion", "fish")
+    (fish_completion/"kube-linter.fish").write fish_output
   end
 
   test do
